@@ -1,0 +1,12 @@
+{
+  "MyVariables": {
+    "VAR1": "Value1",
+    "VAR2": [
+      {
+        "someComplicatedValue": {
+          "key1": "value1",
+          "key2": "value2"
+        }
+      }]
+  }
+}
