@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-kube-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    bb: web
+  ports:
+    - name: client
+      port: 30000
+      targetPort: 30000
+      nodePort: 30000
+    - name: server
+      port: 30001
+      targetPort: 30001
+      nodePort: 30001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-kube-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bb: web
+  template:
+    metadata:
+      labels:
+        bb: web
+    spec:
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: kubeconfigmap
+      containers:
+        - name: test-kube-site
+          image: test-kube
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 30000
+            - containerPort: 30001
+          volumeMounts:
+            - mountPath: /app/config
+              name: configmap-volume
